@@ -1,0 +1,57 @@
+---
+- hosts: all
+  gather_facts: no
+  become: yes
+  tasks:
+    - name: Create a file 'download_yum'
+      copy: 
+        dest: /opt/download_yum
+        mode: 0777
+        content: |
+          #!/bin/bash
+          # Author : cosmo
+          # Script follows here:
+
+          # Install vim and configure
+          sudo apt install vim -y 
+          if [ $? -eq 0 ]
+          then
+          file=$HOME/.vimrc
+          cat > $file <<eof
+          colorscheme ron	
+          eof
+          fi
+
+          source $file
+
+          #-------------------
+          # Install tmux and configure
+
+          sudo apt install tmux -y
+
+
+          if [ $? -eq 0 ]
+          then
+          tmux_conf=$HOME/.tmux.conf
+          tmux show-options -g | sed 's/^/set -g /' >$tmux_conf
+          fi
+
+          apt install git -y
+
+          if [ $? -eq 0 ]
+          then 
+          git clone https://github.com/tmux-plugins/tpm $HOME/.tmux/plugins/tpm
+          # adding List of plugins to the ~/$HOME/.tmux.conf
+          cat >> $tmux_conf <<eol
+          set -g @plugin 'tmux-plugins/tpm'
+          set -g @plugin 'tmux-plugins/tmux-sensible'
+          set -g @plugin 'tmux-plugins/tmux-resurrect'
+
+          # Initialize TMUX plugin manager (keep this line at the very bottom of tmux.conf)
+          run '~/.tmux/plugins/tpm/tpm'
+          eol
+          # type this in terminal if tmux is already running
+          tmux source $tmux_conf
+          fi
+
+        

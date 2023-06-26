@@ -1,0 +1,10 @@
+---
+- hosts: all
+  gather_facts: no
+  tasks: 
+    - name: Create a file
+      file:
+        path: /tmp/address.log
+        mode: 0666
+        state: touch
+...

@@ -1,0 +1,7 @@
+---
+- hosts: appservers
+  gather_facts: no
+  tasks: 
+    - name: Ping only appservers
+      ping: 
+...
