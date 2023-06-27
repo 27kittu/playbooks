@@ -1,0 +1,19 @@
+---
+- hosts: all
+  become: yes
+  tasks:
+    - name: Installing http server
+      yum:
+        name: httpd
+        state: present
+    - name: Creating a service to start httpd on boot
+      systemd:
+        name: httpd.service
+        daemon_reload: true
+        state: restarted
+        enabled: true
+    - name: To copy the html file to /var/www/html/
+      copy:
+        src: index.html
+        dest: /var/www/html
+      

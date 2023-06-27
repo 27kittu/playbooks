@@ -1,0 +1,18 @@
+---
+
+- hosts: all
+  gather_facts: no
+  become: true
+  tasks: 
+    - name: Installing httpd server
+      yum:
+        name: httpd
+        state: latest
+    - name: Creating a service for the server on startup
+      systemd:
+        name: httpd.service
+        daemon_reload: yes
+        state: restarted
+        enabled: true
+
+        
