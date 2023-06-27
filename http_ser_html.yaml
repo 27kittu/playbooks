@@ -1,0 +1,40 @@
+---
+- hosts: all
+  become: true
+  tasks: 
+    - name: Install Apache http server
+      yum:
+        name: httpd
+        state: present
+
+    - name: Start http on reboot
+      systemd:
+        name: httpd.service
+        daemon_reload: true
+        enabled: true
+        state: restarted
+
+    - name: Copy html file to  /var/www/html
+      copy:
+        dest: /var/www/html/index.html
+        content: |
+          <html>
+            <body>
+              <h1>Mithun Technologies</h1>
+              <h2>courses available</h2>
+              <h3>Linux</h3>
+              <h3>Git</h3>
+              <h3>Tomcat</h3>
+              <h3>...so on</h3>
+            </body>
+          </html>
+      notify: 
+        - Start http on reboot
+  handlers:
+    - name: Start http on reboot
+      service:
+        name: httpd
+        state: restarted
+
+
+...
