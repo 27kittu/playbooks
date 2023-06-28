@@ -1,0 +1,8 @@
+- hosts: all
+  gather_facts: False
+  tasks: 
+  - name: Create a file
+    file: 
+      path: /tmp/mithtechno.log
+      mode: 0666
+      state: touch

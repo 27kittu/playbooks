@@ -1,0 +1,17 @@
+- hosts: all
+  gather_facts: False
+  become: true
+  tasks: 
+  - name: Create a file
+    file: 
+      path: /tmp/mithuntechno3.log
+      mode: 1777
+      state: touch
+      owner: ec2-user
+      group: ec2-user
+  - name: create softlink
+    file:
+      src: /tmp/mithuntechno3.log
+      dest: /opt/mithuntechno_softlink.log
+      state: link
+...

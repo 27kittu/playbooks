@@ -1,0 +1,11 @@
+---
+- hosts: all
+  gather_facts: no
+  vars:
+    companyName: MSS
+    location: Bagalore
+  tasks:
+  - name: Display the variable value
+    debug:
+      var: companyName
+...

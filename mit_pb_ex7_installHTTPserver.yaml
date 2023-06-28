@@ -1,0 +1,30 @@
+---
+- hosts: all
+  become: true
+  vars:
+    companyName: MithunTech
+    place: Bangalore
+  vars_files:
+    - var_file.yaml
+
+  tasks:
+    - name: Install Apache Http server	
+      yum:
+        name: httpd
+        state: present
+    - name: Enable the service
+      systemd:
+        name: httpd
+        enabled: true
+
+    - name: starting the http server
+      service:
+        name: httpd
+        state: started
+
+    - name: copy index.html
+      template:
+        src: index.html
+        dest: /var/www/html/
+
+...
