@@ -1,0 +1,16 @@
+- hosts: dbservers
+  become: true
+  tasks:
+    - name: Installing JDK
+      get_url: https://download.oracle.com/java/20/latest/jdk-20_linux-x64_bin.deb (sha256)
+      dest: /opt/jdk.deb
+    - name: Install the .deb package of java
+      apt:
+        name: /opt/jdk.deb
+    - name: Download Tomcat
+      get_url: https://dlcdn.apache.org/tomcat/tomcat-10/v10.1.10/src/apache-tomcat-10.1.10-src.zip
+      dest: /opt/tomcat.zip
+    - name: Install tomcat
+      apt:
+        name: 
+    - name: 

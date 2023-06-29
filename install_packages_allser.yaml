@@ -1,0 +1,51 @@
+---
+- hosts: all
+  gather_facts: yes
+  become: yes
+  tasks:
+    - name: Install Java
+      shell:
+        cmd: " {{pm }} {{java_version}}"
+    - name: Download latest Jenkins
+      get_url:
+        url: https://pkg.jenkins.io/redhat-stable/jenkins.repo
+        dest: /etc/yum.repos.d/jenkins.repo
+      when: ansible_distribution=='Redhat'
+    - name: Run the key for Jenkins
+      shell:
+        cmd: 'rpm --import https://pkg.jenkins.io/redhat-stable/jenkins.io-2023.key' 
+      when: ansible_distribution=='Redhat'
+    - name: install Jenkins
+      yum:
+        name: jenkins
+        state: latest
+      when: ansible_distribution=='Redhat'
+    - name: Creating a Jenkins service
+      systemd:
+        name: jenkins.service
+        enabled: true
+        state: restarted
+      when: ansible_distribution=='Redhat'
+
+    - name: installing git
+      yum:
+        name: git
+        state: latest
+      when: ansible_distribution=='Redhat'
+    - name: installing Tomcat
+      get_url:
+        url: https://dlcdn.apache.org/tomcat/tomcat-10/v10.1.10/src/apache-tomcat-10.1.10-src.zip
+        dest: /opt/tomcat.zip
+      when: ansible_distribution=='Ubuntu'
+    - name: unzip tomcat.zip
+      file: 
+        shell:
+          cmd: unzip /opt/tomcat.zip /opt
+      when: ansible_distribution=='Ubuntu'
+    - name: Creating service to start Tomcat on reboot
+      systemd: 
+        name: tomcat.service
+        daemon_reload: true
+        enabled: true
+        state: restarted
+      when: ansible_distribution=='Ubuntu'
