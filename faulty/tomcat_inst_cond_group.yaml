@@ -1,0 +1,29 @@
+- hosts: tomcat_servers
+  name: To install Java and tomcat in said servers
+  become: yes
+  gather_facts: no
+  tasks:
+    - name: To install java 
+      apt:
+        name: "{{java_version}}"
+        update_cache: yes
+        state: latest
+    - name: Download tomcat software
+      get_url:
+        url: https://dlcdn.apache.org/tomcat/tomcat-8/v8.5.92/src/apache-tomcat-8.5.92-src.zip
+        dest: /opt/
+    - name: Unzip the tomcat package to /opt
+      unarchive:
+        src: /opt/apache-tomcat-8.5.92-src.zip
+        dest: /opt
+        remote_src: yes
+    - name: Change the file permissions in the /opt/apache-tomcat-8.5.92-src/bin/catalina.sh start/bin dir
+      file:
+        path: /opt/apache-tomcat-8.5.92-src/bin/
+        mode: ugo+x 
+        recurse: yes
+    - name: run the server
+      command:
+        cmd: "/opt/apache-tomcat-8.5.92-src/bin/startup.sh start"
+        #cmd: ["sh","/opt/apache-tomcat-8.5.92-src/bin/startup.sh", "start"]
+        

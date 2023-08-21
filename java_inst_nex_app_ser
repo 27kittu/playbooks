@@ -1,0 +1,9 @@
+- hosts: all
+  become: true
+  gather_facts: false
+  tasks:
+    - name: Install java
+      apt:
+        name: "{{java_version}}"
+        update_cache: true
+        state: latest
