@@ -1,0 +1,15 @@
+- hosts: all
+  become: true
+  gather_facts: false
+  tasks: 
+    - name: Installing docker in all the instances
+      apt:
+        name: 
+          - docker.io 
+          - docker-compose
+        update_cache: true
+    - name: Change the permissions for the current user
+      user:
+        name: ubuntu
+        groups: docker 
+        append: yes

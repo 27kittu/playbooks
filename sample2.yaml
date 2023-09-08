@@ -1,0 +1,9 @@
+- hosts: web_servers
+  become: true
+  gather_facts: no
+  tasks:
+    - name: To test the shell module of the ansible
+      shell: |
+        touch /home/ubuntu/file1 \
+        && touch /home/ubuntu/file2 \
+        && touch /home/ubuntu/file3
