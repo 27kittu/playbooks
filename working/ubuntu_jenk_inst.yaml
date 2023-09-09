@@ -1,0 +1,21 @@
+- hosts: web_servers
+  gather_facts: no
+  become: yes
+  tasks:
+    - name: Install Java Development Kit
+      apt:
+        update-cache: yes
+        name: default-jdk
+    - name: Adding the Jenkins repo public-key and repository
+      shell: |
+        curl -fsSL https://pkg.jenkins.io/debian-stable/jenkins.io-2023.key | sudo tee /usr/share/keyrings/jenkins-keyring.asc > /dev/null
+        echo deb [signed-by=/usr/share/keyrings/jenkins-keyring.asc] https://pkg.jenkins.io/debian-stable binary/ | sudo tee /etc/apt/sources.list.d/jenkins.list > /dev/null
+    - name: Updating mirrors and installing Jenkins
+      apt:
+        update-cache: yes
+        name: jenkins
+    - name: Creating jenkins service
+      service:
+        name: jenkins.service
+        state: restarted
+        enabled: yes

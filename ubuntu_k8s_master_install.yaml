@@ -1,0 +1,13 @@
+- hosts: web_servers
+  become: yes
+  gather_facts: no
+  tasks: 
+    - name: Initialize Kubernates master by executing below commond.
+      shell:
+        kubeadm init
+        kubeadm init --control-plane-endpoint "172.31.38.76:6443"
+        sudo su ubuntu
+        mkdir -p /home/ubuntu/.kube
+        sudo cp -i /etc/kubernetes/admin.conf /home/ubuntu/.kube/config
+        sudo chown $(id -u):$(id -g) /home/ubuntu/.kube/config
+        
