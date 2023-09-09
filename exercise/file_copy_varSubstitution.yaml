@@ -1,0 +1,21 @@
+- hosts: all
+  become: true
+  tasks:
+    - name: Creating an empty file in all servers using vars
+      vars: 
+        - file_name : logger
+      file:
+        path: "/home/ubuntu/{{file_name}}"
+        mode: '0755'
+        owner: ubuntu
+        group: ubuntu
+        state: touch
+    - name: Adding content based on the servers type using vars.
+      vars: 
+        - file_name : logger
+      copy: 
+        dest: /home/ubuntu/{{file_name}}
+        content: | 
+          This is to check if the vars is working or not
+          This I want to use them in real tasks to make my work easier
+        

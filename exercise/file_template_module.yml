@@ -1,0 +1,22 @@
+- hosts: web_servers
+  become: yes
+  vars:
+    - name: kittu
+  tasks: 
+    - name: Create empty file 
+      file: 
+        path: /home/ubuntu/logs
+        mode: 0755
+        owner: ubuntu
+        group: ubuntu
+        state: touch
+    - name: Writing content to the file created
+      template:
+        src: /home/ubuntu/html
+        dest: /home/ubuntu/html 
+        content: | 
+          <html> 
+            <body>
+              <h1>Hi this is {{name}}<h1>
+            </body>
+          </html>

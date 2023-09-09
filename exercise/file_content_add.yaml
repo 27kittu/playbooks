@@ -1,0 +1,16 @@
+- hosts: web_servers
+  become: yes
+  tasks:
+    - name: Create a file 'logs' using 'file' module
+      file:
+        mode: 777
+        dest: /home/ubuntu/logs
+        owner: ubuntu
+        group: ubuntu
+        state: touch
+    - name: Writing the content to the file
+      copy:
+        content: | 
+          Hi, this is normal text to exercise on the ansible file and content modules.
+          This is to test if next line is working or not
+        dest: /home/ubuntu/logs
