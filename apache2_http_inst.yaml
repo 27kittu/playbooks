@@ -1,0 +1,34 @@
+- hosts: localhost
+  become: true
+  gather_facts: false
+  tasks:
+    - name: Creating a web page for apache2 http server
+      file: 
+        state: touch
+        mode: '0755'
+        owner: ansible
+        group: ansible
+        path: /home/ansible/index.html
+    - name: writing content to file
+      copy:
+        dest: /home/ansible/index.html
+        content: |
+          <html>
+            <body>
+              <h1> This is only to show text on the page</h1>
+            </body>
+          </html>
+    - name: Installing 'apache2 http' server
+      apt:
+        update_cache: true
+        name: apache2
+        state: latest
+    - name: Moving /home/ansible/index.html file to /var/www/html/
+      copy:
+        src: /home/ansible/index.html
+        dest: /var/www/html/index.html
+    - name: Creating apache2-http service
+      service:
+        name: apache2.service
+        state: restarted
+        enabled: true
